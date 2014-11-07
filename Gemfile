@@ -46,3 +46,4 @@ group :development do
 end
 
 gem 'nokogiri'
+gem 'newrelic_rpm'
