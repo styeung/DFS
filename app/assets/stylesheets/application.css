@@ -13,3 +13,36 @@
  *= require_tree .
  *= require_self
  */
+
+html, body, h1, h2, h3, h4, h5, div, a, p, ul, li{
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: monospace;
+}
+
+ul {
+  list-style: none;
+}
+
+.group:after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+.group > li {
+  float: left;
+}
+
+.table-name {
+  width: 140px;
+}
+
+.table-attribute {
+  width: 80px;
+}
+

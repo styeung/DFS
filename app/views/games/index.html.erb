@@ -1,4 +1,3 @@
-
-<p><%= @home %></p>
-<hr>
-<p><%= @away %></p>
+<% @previous_games.each do |game| %>
+  <p><a href="<%= game_url(game) %>"><%=  game.date %> - <%= game.away_team.name %> at <%= game.home_team.name %></a></p>
+<% end %>

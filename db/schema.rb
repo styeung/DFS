@@ -11,23 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141105174159) do
+ActiveRecord::Schema.define(version: 20141106080132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "games", force: true do |t|
-    t.date     "date",       null: false
-    t.string   "home_team",  null: false
-    t.string   "away_team",  null: false
+    t.date     "date",         null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "away_team_id", null: false
+    t.integer  "home_team_id", null: false
   end
 
-  add_index "games", ["away_team"], name: "index_games_on_away_team", using: :btree
-  add_index "games", ["date", "home_team", "away_team"], name: "index_games_on_date_and_home_team_and_away_team", unique: true, using: :btree
+  add_index "games", ["away_team_id"], name: "index_games_on_away_team_id", using: :btree
   add_index "games", ["date"], name: "index_games_on_date", using: :btree
-  add_index "games", ["home_team"], name: "index_games_on_home_team", using: :btree
+  add_index "games", ["home_team_id"], name: "index_games_on_home_team_id", using: :btree
 
   create_table "player_games", force: true do |t|
     t.integer  "player_id",  null: false

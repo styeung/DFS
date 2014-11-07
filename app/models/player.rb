@@ -14,4 +14,6 @@ class Player < ActiveRecord::Base
     foreign_key: :player_id,
     primary_key: :id
   )
+  
+  
 end

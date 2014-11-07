@@ -1,0 +1,36 @@
+<h2><%= @game.home_team.name %></h2>
+<ul class="group">
+  <li class="table-name">Name</li>
+  <% @game.player_games[0].attributes.each do |key, value| %>
+    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
+    <li class="table-attribute"><%= key %></li>
+  <% end %>
+</ul>
+<% @home_team_players.each do |player_game| %>
+  <ul class="group">
+    <li class="table-name"><%= player_game.player.name %></li>
+  <% player_game.attributes.each do |key, value| %>
+    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
+    <li class="table-attribute"><%= value %></li>
+  <% end %>
+  </ul>
+<% end %>
+
+<br>
+<h2><%= @game.away_team.name %></h2>
+<ul class="group">
+  <li class="table-name">Name</li>
+  <% @game.player_games[0].attributes.each do |key, value| %>
+    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
+    <li class="table-attribute"><%= key %></li>
+  <% end %>
+</ul>
+<% @away_team_players.each do |player_game| %>
+  <ul class="group">
+    <li class="table-name"><%= player_game.player.name %></li>
+  <% player_game.attributes.each do |key, value| %>
+    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
+    <li class="table-attribute"> <%= value %></li>
+  <% end %>
+  </ul>
+<% end %>

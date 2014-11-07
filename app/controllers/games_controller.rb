@@ -5,13 +5,22 @@ class GamesController < ApplicationController
   before_action :load_new_data, only: [:index]
   
   def index
-    @games = Game.all
     render :index
   end
   
   def show
-    @game = Game.find(params[:id])
+    @game = Game.eager_load(:home_team, :away_team, player_games: [:player]).find(params[:id])
+    @home_team_players = []
+    @away_team_players = []
     
+    @game.player_games.each do |player_game|
+      if player_game.player.team_id == @game.home_team_id
+        @home_team_players << player_game
+      elsif player_game.player.team_id == @game.away_team_id
+        @away_team_players << player_game
+      end
+    end
+        
     if @game
       render :show
     else
@@ -22,19 +31,10 @@ class GamesController < ApplicationController
   private
   
   def load_new_data
-    current_game = Game.first
+    @previous_games = Game.eager_load(:home_team, :away_team, player_games: [:player]).previous_games
     
-    if current_game.player_games.empty?
-      domain = "http://www.basketball-reference.com"
-      path = "boxscores"
-      game_detail = "#{current_game.date.strftime('%Y%m%d')}0#{current_game.home_team}"
-      
-      page = Nokogiri::HTML(open("http://www.basketball-reference.com/boxscores/201411040TOR.html"))
-      # page = Nokogiri::HTML(open("#{domain}/#{path}/#{game_detail}.html"))
-      headers_html =  page.css("th.tooltip")
-      @away = page.css("#div_OKC_basic")
-      @home = page.css("#div_TOR_basic")
-      
+    @previous_games.each do |game|
+      game.create_player_games if game.player_games.empty?
     end
   end
   
