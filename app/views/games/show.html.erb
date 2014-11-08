@@ -1,4 +1,4 @@
-<h2><%= @game.home_team.name %></h2>
+<h2><a href="<%= team_url(@game.home_team) %>"><%= @game.home_team.name %></a></h2>
 <ul class="group">
   <li class="table-name">Name</li>
   <% @game.player_games[0].attributes.each do |key, value| %>
@@ -17,7 +17,7 @@
 <% end %>
 
 <br>
-<h2><%= @game.away_team.name %></h2>
+<h2><a href="<%= team_url(@game.away_team) %>"><%= @game.away_team.name %></a></h2>
 <ul class="group">
   <li class="table-name">Name</li>
   <% @game.player_games[0].attributes.each do |key, value| %>

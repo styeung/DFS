@@ -47,3 +47,5 @@ end
 
 gem 'nokogiri'
 gem 'newrelic_rpm'
+gem 'capybara'
+gem 'poltergeist'

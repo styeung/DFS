@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   
   resources :games, only: [:index, :show]
   
-  get "daily_projections", to: "games#daily_projects"
+  get "daily_projections", to: "players#daily_projections", as: "daily_projections"
   
   get "entire_day_games/:date", to: "games#entire_day_games", as: "entire_day_games"
 end
