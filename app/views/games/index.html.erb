@@ -1,3 +1,10 @@
+<% dates_hash = {} %>
 <% @previous_games.each do |game| %>
+  <% if dates_hash[ game.date.strftime("%d-%b-%Y") ].nil?  %>
+    <br>
+    <a href="<%=  entire_day_games_url(game.date.strftime("%d-%b-%Y")) %>"><%= game.date.strftime("%d-%b-%Y") %></a>
+  <% end %>
+  
+  <% dates_hash[ game.date.strftime("%d-%b-%Y") ] ||= true %>
   <p><a href="<%= game_url(game) %>"><%=  game.date %> - <%= game.away_team.name %> at <%= game.home_team.name %></a></p>
 <% end %>

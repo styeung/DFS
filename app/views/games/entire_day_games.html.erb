@@ -1,0 +1,20 @@
+<ul class="group">
+  <li class="table-name">Name</li>
+  <li class="table-attribute">Team</li>
+  <li class="table-attribute">Position</li>
+  <li class="table-attribute">Total Fantasy Points</li>
+  <li class="table-attribute">Minutes Played</li>
+  <li class="table-attribute">Points Per Game</li>
+</ul>
+
+<% @entire_day_player_games.each do |player_game| %>
+  <%  total_fantasy_points = player_game.total_fantasy_points %>
+  <ul class="group">
+    <li class="table-name"><%= player_game.player.name %></li>
+    <li class="table-attribute"><%= player_game.player.team.name %></li>
+    <li class="table-attribute"><%= player_game.player.position %></li>
+    <li class="table-attribute"><%= total_fantasy_points %></li>
+    <li class="table-attribute"><%= player_game.minutes %></li>
+    <li class="table-attribute"><%= total_fantasy_points/player_game.minutes %></li>
+  </ul>
+<% end %>

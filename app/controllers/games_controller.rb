@@ -28,11 +28,24 @@ class GamesController < ApplicationController
     end
   end
   
+  def entire_day_games
+    @entire_day_games = Game.eager_load(:home_team, :away_team, player_games: [player: [:team ]]).where(date: params[:date])
+        
+    @entire_day_player_games = []
+    
+    @entire_day_games.each do |game|
+      @entire_day_player_games.concat(game.player_games)
+    end
+    
+    @entire_day_player_games.sort! { |x, y| y.total_fantasy_points <=> x.total_fantasy_points }
+    render :entire_day_games
+  end
+  
   private
   
   def load_new_data
-    @previous_games = Game.eager_load(:home_team, :away_team, player_games: [:player]).previous_games
-    
+    @previous_games = Game.eager_load(:home_team, :away_team, player_games: [player: [ :team ]]).previous_games
+  
     @previous_games.each do |game|
       game.create_player_games if game.player_games.empty?
     end

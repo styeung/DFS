@@ -7,7 +7,12 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+<header>
+  <ul class="group">
+    <li class="header-link"><a href="<%= root_url %>">Index</a></li>
+    <li class="header-link"><a href="#">Daily Projections</a></li>
+  </ul>
+</header>
 <%= yield %>
 
 </body>

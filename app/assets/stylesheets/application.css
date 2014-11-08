@@ -24,6 +24,10 @@ body {
   font-family: monospace;
 }
 
+header {
+  padding: 20px 0;
+}
+
 ul {
   list-style: none;
 }
@@ -44,5 +48,9 @@ ul {
 
 .table-attribute {
   width: 80px;
+}
+
+.header-link {
+  padding: 0 20px;
 }
 
