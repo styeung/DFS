@@ -15,5 +15,19 @@ class Player < ActiveRecord::Base
     primary_key: :id
   )
   
+  def average_fantasy_points
+    sum = 0
+    @player_games = self.player_games
+    
+    if @player_games.length > 1
+      @player_games.each do |player_game|
+        sum += player_game.total_fantasy_points
+      end
+    
+      return sum/@player_games.length
+    else
+      return 0
+    end
+  end
   
 end

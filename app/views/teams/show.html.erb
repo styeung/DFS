@@ -1,9 +1,32 @@
+<% @opponents.each do |opponent| %>
+<p><%= opponent.name %></p>
+<% end %>
+
+<h1>Offense</h1>
+<ul class="group">
+  <li class="table-name">Name</li>
+  <li class="table-attribute">Position</li>
+  <li class="table-attribute">Avg Fantasy Points Per Game</li>
+</ul>
+<% @team_players.each do |player| %>
+<ul class="group">
+  <li class="table-name"><a href="<%= player_url(player) %>"><%= player.name %></a></li>
+  <li class="table-attribute"><%= player.position %></li>
+  <li class="table-attribute"><%= player.average_fantasy_points.round(2) %></li>
+</ul>
+<% end %>
+
+  
+<br>
+<h1>Defense</h1>
 <h2><%= @team.name %></h2>
 <ul class="group">
   <li class="table-attribute">Position</li>
-  <li class="table-attribute">Avg Points Against This Team</li>
-  <li class="table-attribute">Avg Points Against League</li>
-  <li class="table-attribute">Multiplier</li>
+  <li class="table-attribute">Avg PPM Against <%= @team.name %></li>
+  <li class="table-attribute">Avg PPM Of Opponents</li>
+  <li class="table-attribute">Avg PPM Against League</li>
+  <li class="table-attribute">League Multiplier</li>
+  <li class="table-attribute">Opponents Multiplier</li>
 </ul>
 
 <br>
@@ -11,35 +34,45 @@
 <ul class="group">
   <li class="table-attribute">PG</li>
   <li class="table-attribute"><%= @against_team_avg_pg_points %></li>
+  <li class="table-attribute"><%= @all_opponents_avg_pg_points %></li>
   <li class="table-attribute"><%= @league_avg_pg_points %></li>
-  <li class="table-attribute"><%= @pg_multiplier %></li>
+  <li class="table-attribute"><%= @pg_league_multiplier %></li>
+  <li class="table-attribute"><%= @pg_opponents_multiplier %></li>
 </ul>
 
 <ul class="group">
   <li class="table-attribute">SG</li>
   <li class="table-attribute"><%= @against_team_avg_sg_points %></li>
+  <li class="table-attribute"><%= @all_opponents_avg_sg_points %></li>
   <li class="table-attribute"><%= @league_avg_sg_points %></li>
-  <li class="table-attribute"><%= @sg_multiplier %></li>
+  <li class="table-attribute"><%= @sg_league_multiplier %></li>
+  <li class="table-attribute"><%= @sg_opponents_multiplier %></li>
 </ul>
 
 <ul class="group">
   <li class="table-attribute">SF</li>
   <li class="table-attribute"><%= @against_team_avg_sf_points %></li>
+  <li class="table-attribute"><%= @all_opponents_avg_sf_points %></li>
   <li class="table-attribute"><%= @league_avg_sf_points %></li>
-  <li class="table-attribute"><%= @sf_multiplier %></li>
+  <li class="table-attribute"><%= @sf_league_multiplier %></li>
+  <li class="table-attribute"><%= @sf_opponents_multiplier %></li>
 </ul>
 
 <ul class="group">
   <li class="table-attribute">PF</li>
   <li class="table-attribute"><%= @against_team_avg_pf_points %></li>
+  <li class="table-attribute"><%= @all_opponents_avg_pf_points %></li>
   <li class="table-attribute"><%= @league_avg_pf_points %></li>
-  <li class="table-attribute"><%= @pf_multiplier %></li>
+  <li class="table-attribute"><%= @pf_league_multiplier %></li>
+  <li class="table-attribute"><%= @pf_opponents_multiplier %></li>
 </ul>
 
 <ul class="group">
   <li class="table-attribute">C</li>
   <li class="table-attribute"><%= @against_team_avg_c_points %></li>
+  <li class="table-attribute"><%= @all_opponents_avg_c_points %></li>
   <li class="table-attribute"><%= @league_avg_c_points %></li>
-  <li class="table-attribute"><%= @c_multiplier %></li>
+  <li class="table-attribute"><%= @c_league_multiplier %></li>
+  <li class="table-attribute"><%= @c_opponents_multiplier %></li>
 </ul>
 
