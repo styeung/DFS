@@ -2,6 +2,7 @@ class Game < ActiveRecord::Base
   validates :date, :home_team_id, :away_team_id, presence: true
   
   scope :previous_games, -> { where("date < ?", Date.current).order(:date) }
+  scope :todays_games, -> { where(date: Date.current ) }
   
   has_many(
     :player_games,

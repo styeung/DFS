@@ -1,1 +1,24 @@
-<p><%= @title %></p>
+<h2>For <%= Date.current.strftime("%a, %b %d, %Y") %></h2>
+<br>
+<ul class="group">
+  <li class="table-name">Name</li>
+  <li class="table-name">Position</li>
+  <li class="table-name">Opponent</li>
+  <li class="table-attribute">Average Fantasy Points</li>
+  <li class="table-attribute">League Multiplier</li>
+  <li class="table-attribute">Opponents Multiplier</li>
+  <li class="table-attribute">Adjusted FP - League</li>
+  <li class="table-attribute">Adjusted FP - Opp</li>
+</ul>
+
+<% @player_array.each do |player_hash| %>
+<ul class="group">
+  <% player_hash.each do |key, value| %>
+    <% if value.class == String %>
+      <li class="table-name"><%= value %></li>
+    <% else %>
+      <li class="table-attribute"><%= value.round(2) %></li>
+    <% end %>
+  <% end %>
+</ul>
+<% end %>

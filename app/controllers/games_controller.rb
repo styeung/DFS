@@ -50,5 +50,5 @@ class GamesController < ApplicationController
       game.create_player_games if game.player_games.empty?
     end
   end
-  
+    
 end
