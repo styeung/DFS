@@ -121,7 +121,7 @@ class PlayersController < ApplicationController
         end
       
       end
-
+      
       @player_array = []
 
       @todays_games.each do |game|
