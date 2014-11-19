@@ -24,7 +24,37 @@ class TeamsController < ApplicationController
 
     @team_players = @team.players.sort { |x, y| y.average_fantasy_points <=> x.average_fantasy_points }
 
-    team = @team
+    @team_players_list = []
+
+    @team_players.each do |player|
+      point_history = player.point_history.sort
+      point_history_length = point_history.length
+
+      if point_history_length > 0
+        team_players_hash = {}
+
+        team_players_hash["id"] = player.id
+        team_players_hash["name"] = player.name
+        team_players_hash["position"] = player.position
+        team_players_hash["average"] = point_history.inject { |sum, el| sum + el }/point_history_length
+        
+        if point_history_length % 2 == 0
+          team_players_hash["median"] = ((point_history[point_history_length/2 - 1] + point_history[point_history_length/2])/2).round(2)
+        else
+          team_players_hash["median"] = point_history[point_history_length/2].round(2)
+        end
+
+        squared_differences = point_history.map { |el| (el - team_players_hash["average"])**2 }
+
+        team_players_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history_length).round(2)
+
+        @team_players_list << team_players_hash
+      end
+    end
+
+    @team_players_list.sort { |x, y| y["average"] <=> x["average"] }
+
+    team = Team.find(params[:id])
 
     involved_home_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
                                .previous_games
@@ -42,6 +72,7 @@ class TeamsController < ApplicationController
     involved_away_games.each do |game|
       @opponents.add(game.home_team)
     end
+
 
     league = Hash.new {|h, k| h[k] = Hash.new }
     all_opponents = Hash.new {|h, k| h[k] = Hash.new }

@@ -15,8 +15,25 @@ class Player < ActiveRecord::Base
     primary_key: :id
   )
   
+  def point_history
+    @player_games = self.player_games
+    @output = []
+    
+    if @player_games.length > 1
+      @player_games.each do |player_game|
+        @output << player_game.total_fantasy_points
+      end
+    
+      return @output.sort
+    else
+      return []
+    end
+  
+  end
+  
   def average_fantasy_points
     sum = 0
+
     @player_games = self.player_games
     
     if @player_games.length > 1
@@ -94,6 +111,7 @@ class Player < ActiveRecord::Base
      Player.find_by_name("A.J. Price").update(position: "PG")
      Player.find_by_name("Drew Gordon").update(position: "PF")
      Player.find_by_name("Noah Vonleh").update(position: "PF")
+     Player.find_by_name("Robert Covington").update(position: "SF")
   end
   
 end
