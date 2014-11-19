@@ -23,7 +23,7 @@ class PlayersController < ApplicationController
                  .todays_games
 
     @all_teams = Team.all
-
+    
     @positions = Set.new([
       "PG",
       "SG",
@@ -86,7 +86,6 @@ class PlayersController < ApplicationController
                 all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
               end
             end
-
             league[player_game.player.position]["points"] += player_game.total_fantasy_points
           end
 
