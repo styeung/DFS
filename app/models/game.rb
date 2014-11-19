@@ -63,7 +63,7 @@ class Game < ActiveRecord::Base
           points = row.css("td")[19].text.to_i
 
           current_player = Player.find_by_name(name)
-          
+
           unless current_player.nil?
             PlayerGame.create(
               player_id: current_player.id,
@@ -84,7 +84,7 @@ class Game < ActiveRecord::Base
             )
           else
             current_player = Player.create({
-              name: player_name,
+              name: name,
               position: "NA",
               team_id: team.id
             })
