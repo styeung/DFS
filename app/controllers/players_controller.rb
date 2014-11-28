@@ -95,24 +95,6 @@ class PlayersController < ApplicationController
             league[player_game.player.position]["count"] += player_game.minutes
           end
 
-          # if game.home_team_id == team.id || game.away_team_id == team.id
-#             @positions.each do |position|
-#               all_opponents[position]["count"] += 1
-#               against_team[position]["count"] += 1
-#             end
-#           elsif @opponents.include?(game.home_team) && @opponents.include?(game.away_team)
-#             @positions.each do |position|
-#               all_opponents[position]["count"] += 2
-#             end
-#           elsif @opponents.include?(game.home_team) || @opponents.include?(game.away_team)
-#             @positions.each do |position|
-#               all_opponents[position]["count"] += 1
-#             end
-#           end
-#
-#           @positions.each do |position|
-#             league[position]["count"] += 2
-#           end
         end
 
         
@@ -139,6 +121,8 @@ class PlayersController < ApplicationController
           player_hash["opponent"] = game.away_team.name
           player_hash["average_fantasy_points"] = player.average_fantasy_points
           player_hash["expected_fantasy_points"] = player.expected_fantasy_points
+          player_hash["average_fantasy_points_per_minute"] = player.fantasy_points_per_minute
+          player_hash["median_minutes"] = player.median_minutes
           
           point_history = player.point_history
 
@@ -151,9 +135,9 @@ class PlayersController < ApplicationController
           
           player_hash["stdev_normalized"] = (player_hash["stdev"] / player_hash["expected_fantasy_points"]).round(2)
           
-          player_hash["league_multiplier"] = league_multiplier[player.position][game.away_team.name]
+          # player_hash["league_multiplier"] = league_multiplier[player.position][game.away_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.away_team.name]
-          player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
+          # player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
           player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"])
 
           @player_array << player_hash
@@ -169,6 +153,8 @@ class PlayersController < ApplicationController
           player_hash["opponent"] = game.home_team.name
           player_hash["average_fantasy_points"] = player.average_fantasy_points
           player_hash["expected_fantasy_points"] = player.expected_fantasy_points
+          player_hash["average_fantasy_points_per_minute"] = player.fantasy_points_per_minute
+          player_hash["median_minutes"] = player.median_minutes
           
           point_history = player.point_history
 
@@ -181,9 +167,9 @@ class PlayersController < ApplicationController
           
           player_hash["stdev_normalized"] = (player_hash["stdev"] / player_hash["expected_fantasy_points"]).round(2)
           
-          player_hash["league_multiplier"] = league_multiplier[player.position][game.home_team.name]
+          # player_hash["league_multiplier"] = league_multiplier[player.position][game.home_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.home_team.name]
-          player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
+          # player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
           player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"])
 
           @player_array << player_hash
