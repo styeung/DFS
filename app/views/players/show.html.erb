@@ -1,0 +1,17 @@
+<h1><%= @player.name %></h1>
+<ul class="group">
+  <li class="table-name">Date</li>
+  <li class="table-name">Matchup</li>
+  <li class="table-attribute">Minutes</li>
+  <li class="table-attribute">Total Fantasy Points</li>
+  <li class="table-attribute">Points Per Minute</li>
+</ul>
+<% @player_games.each do |player_game| %>
+<ul class="group">
+  <li class="table-name"><%= player_game.game.date %></li>
+  <li class="table-name"><%= player_game.game.away_team.name %> @ <%= player_game.game.home_team.name %></li>
+  <li class="table-attribute"><%= player_game.minutes %></li>
+  <li class="table-attribute"><%= player_game.total_fantasy_points %></li>
+  <li class="table-attribute"><%= (player_game.total_fantasy_points/player_game.minutes).round(2) %></li>
+</ul>
+<% end %>

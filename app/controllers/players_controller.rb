@@ -140,15 +140,16 @@ class PlayersController < ApplicationController
           player_hash["average_fantasy_points"] = player.average_fantasy_points
           player_hash["expected_fantasy_points"] = player.expected_fantasy_points
           
-          point_history_per_minute = player.point_history_per_minute
-          
-          if point_history_per_minute.length > 0
-            average_points_per_minute = point_history_per_minute.inject { |sum, el| sum + el } / point_history_per_minute.length
-            squared_differences = point_history_per_minute.map { |el| (el - average_points_per_minute)**2 }
-            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history_per_minute.length).round(2)
+          point_history = player.point_history
+
+          if point_history.length > 0
+            squared_differences = point_history.map { |el| (el - player.average_fantasy_points)**2 }
+            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history.length).round(2)
           else
             player_hash["stdev"] = 0
           end
+          
+          player_hash["stdev_normalized"] = (player_hash["stdev"] / player_hash["expected_fantasy_points"]).round(2)
           
           player_hash["league_multiplier"] = league_multiplier[player.position][game.away_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.away_team.name]
@@ -169,15 +170,16 @@ class PlayersController < ApplicationController
           player_hash["average_fantasy_points"] = player.average_fantasy_points
           player_hash["expected_fantasy_points"] = player.expected_fantasy_points
           
-          point_history_per_minute = player.point_history_per_minute
-          
-          if point_history_per_minute.length > 0
-            average_points_per_minute = point_history_per_minute.inject { |sum, el| sum + el } / point_history_per_minute.length
-            squared_differences = point_history_per_minute.map { |el| (el - average_points_per_minute)**2 }
-            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history_per_minute.length).round(2)
+          point_history = player.point_history
+
+          if point_history.length > 0
+            squared_differences = point_history.map { |el| (el - player.average_fantasy_points)**2 }
+            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history.length).round(2)
           else
             player_hash["stdev"] = 0
           end
+          
+          player_hash["stdev_normalized"] = (player_hash["stdev"] / player_hash["expected_fantasy_points"]).round(2)
           
           player_hash["league_multiplier"] = league_multiplier[player.position][game.home_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.home_team.name]
