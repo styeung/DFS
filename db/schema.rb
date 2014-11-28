@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127172004) do
+ActiveRecord::Schema.define(version: 20141128192040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20141127172004) do
     t.integer  "steals"
     t.integer  "blocks"
     t.integer  "turnovers"
-    t.integer  "minutes"
+    t.float    "minutes"
     t.integer  "fga"
     t.integer  "fgm"
     t.integer  "three_fga"

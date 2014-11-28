@@ -27,7 +27,7 @@ class TeamsController < ApplicationController
     @team_players_list = []
 
     @team_players.each do |player|
-      point_history = player.point_history.sort
+      point_history = player.point_history
       point_history_length = point_history.length
 
       if point_history_length > 0
@@ -38,11 +38,7 @@ class TeamsController < ApplicationController
         team_players_hash["position"] = player.position
         team_players_hash["average"] = point_history.inject { |sum, el| sum + el }/point_history_length
         
-        if point_history_length % 2 == 0
-          team_players_hash["median"] = ((point_history[point_history_length/2 - 1] + point_history[point_history_length/2])/2).round(2)
-        else
-          team_players_hash["median"] = point_history[point_history_length/2].round(2)
-        end
+        team_players_hash["median"] = player.median_fantasy_points
 
         squared_differences = point_history.map { |el| (el - team_players_hash["average"])**2 }
 
@@ -94,35 +90,39 @@ class TeamsController < ApplicationController
       game.player_games.each do |player_game|
         if player_game.player.team_id == team.id
           all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
+          all_opponents[player_game.player.position]["count"] += player_game.minutes
         else
           if game.home_team_id == team.id || game.away_team_id == team.id
             against_team[player_game.player.position]["points"] += player_game.total_fantasy_points
+            against_team[player_game.player.position]["count"] += player_game.minutes
           elsif @opponents.include?(player_game.player.team)
             all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
+            all_opponents[player_game.player.position]["count"] += player_game.minutes
           end
         end
 
         league[player_game.player.position]["points"] += player_game.total_fantasy_points
+        league[player_game.player.position]["count"] += player_game.minutes
       end
 
-      if game.home_team_id == team.id || game.away_team_id == team.id
-        @positions.each do |position|
-          all_opponents[position]["count"] += 1
-          against_team[position]["count"] += 1
-        end
-      elsif @opponents.include?(game.home_team) && @opponents.include?(game.away_team)
-        @positions.each do |position|
-          all_opponents[position]["count"] += 2
-        end
-      elsif @opponents.include?(game.home_team) || @opponents.include?(game.away_team)
-        @positions.each do |position|
-          all_opponents[position]["count"] += 1
-        end
-      end
-
-      @positions.each do |position|
-        league[position]["count"] += 2
-      end
+      # if game.home_team_id == team.id || game.away_team_id == team.id
+#         @positions.each do |position|
+#           all_opponents[position]["count"] += 1
+#           against_team[position]["count"] += 1
+#         end
+#       elsif @opponents.include?(game.home_team) && @opponents.include?(game.away_team)
+#         @positions.each do |position|
+#           all_opponents[position]["count"] += 2
+#         end
+#       elsif @opponents.include?(game.home_team) || @opponents.include?(game.away_team)
+#         @positions.each do |position|
+#           all_opponents[position]["count"] += 1
+#         end
+#       end
+#
+#       @positions.each do |position|
+#         league[position]["count"] += 2
+#       end
     end
 
     

@@ -6,7 +6,8 @@ class PlayersController < ApplicationController
   end
 
   def show
-    @player = Player.find(params[:id])
+    @player = Player.eager_load(player_games: [:game]).find(params[:id])
+    @player_games = @player.player_games
 
     if @player
       render :show
@@ -14,6 +15,7 @@ class PlayersController < ApplicationController
       render json: "Player does not exist"
     end
   end
+  
 
   def daily_projections
     @previous_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
@@ -79,34 +81,38 @@ class PlayersController < ApplicationController
           game.player_games.each do |player_game|
             if player_game.player.team_id == team.id
               all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
+              all_opponents[player_game.player.position]["count"] += player_game.minutes
             else
               if game.home_team_id == team.id || game.away_team_id == team.id
                 against_team[player_game.player.position]["points"] += player_game.total_fantasy_points
+                against_team[player_game.player.position]["count"] += player_game.minutes
               elsif @opponents.include?(player_game.player.team)
                 all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
+                all_opponents[player_game.player.position]["count"] += player_game.minutes
               end
             end
             league[player_game.player.position]["points"] += player_game.total_fantasy_points
+            league[player_game.player.position]["count"] += player_game.minutes
           end
 
-          if game.home_team_id == team.id || game.away_team_id == team.id
-            @positions.each do |position|
-              all_opponents[position]["count"] += 1
-              against_team[position]["count"] += 1
-            end
-          elsif @opponents.include?(game.home_team) && @opponents.include?(game.away_team)
-            @positions.each do |position|
-              all_opponents[position]["count"] += 2
-            end
-          elsif @opponents.include?(game.home_team) || @opponents.include?(game.away_team)
-            @positions.each do |position|
-              all_opponents[position]["count"] += 1
-            end
-          end
-
-          @positions.each do |position|
-            league[position]["count"] += 2
-          end
+          # if game.home_team_id == team.id || game.away_team_id == team.id
+#             @positions.each do |position|
+#               all_opponents[position]["count"] += 1
+#               against_team[position]["count"] += 1
+#             end
+#           elsif @opponents.include?(game.home_team) && @opponents.include?(game.away_team)
+#             @positions.each do |position|
+#               all_opponents[position]["count"] += 2
+#             end
+#           elsif @opponents.include?(game.home_team) || @opponents.include?(game.away_team)
+#             @positions.each do |position|
+#               all_opponents[position]["count"] += 1
+#             end
+#           end
+#
+#           @positions.each do |position|
+#             league[position]["count"] += 2
+#           end
         end
 
         
@@ -127,14 +133,27 @@ class PlayersController < ApplicationController
         game.home_team.players.each do |player|
           next unless @positions.include?(player.position)
           player_hash = {}
+          player_hash["id"] = player.id
           player_hash["name"] = player.name
           player_hash["position"] = player.position
           player_hash["opponent"] = game.away_team.name
           player_hash["average_fantasy_points"] = player.average_fantasy_points
+          player_hash["expected_fantasy_points"] = player.expected_fantasy_points
+          
+          point_history_per_minute = player.point_history_per_minute
+          
+          if point_history_per_minute.length > 0
+            average_points_per_minute = point_history_per_minute.inject { |sum, el| sum + el } / point_history_per_minute.length
+            squared_differences = point_history_per_minute.map { |el| (el - average_points_per_minute)**2 }
+            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history_per_minute.length).round(2)
+          else
+            player_hash["stdev"] = 0
+          end
+          
           player_hash["league_multiplier"] = league_multiplier[player.position][game.away_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.away_team.name]
-          player_hash["adjusted_fantasy_points_league"] = (player_hash["average_fantasy_points"] * player_hash["league_multiplier"])
-          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["average_fantasy_points"] * player_hash["opponents_multiplier"])
+          player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
+          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"])
 
           @player_array << player_hash
 
@@ -143,14 +162,27 @@ class PlayersController < ApplicationController
         game.away_team.players.each do |player|
           next unless @positions.include?(player.position)
           player_hash = {}
+          player_hash["id"] = player.id
           player_hash["name"] = player.name
           player_hash["position"] = player.position
           player_hash["opponent"] = game.home_team.name
           player_hash["average_fantasy_points"] = player.average_fantasy_points
+          player_hash["expected_fantasy_points"] = player.expected_fantasy_points
+          
+          point_history_per_minute = player.point_history_per_minute
+          
+          if point_history_per_minute.length > 0
+            average_points_per_minute = point_history_per_minute.inject { |sum, el| sum + el } / point_history_per_minute.length
+            squared_differences = point_history_per_minute.map { |el| (el - average_points_per_minute)**2 }
+            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history_per_minute.length).round(2)
+          else
+            player_hash["stdev"] = 0
+          end
+          
           player_hash["league_multiplier"] = league_multiplier[player.position][game.home_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.home_team.name]
-          player_hash["adjusted_fantasy_points_league"] = (player_hash["average_fantasy_points"] * player_hash["league_multiplier"])
-          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["average_fantasy_points"] * player_hash["opponents_multiplier"])
+          player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
+          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"])
 
           @player_array << player_hash
         end

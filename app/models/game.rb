@@ -47,8 +47,10 @@ class Game < ActiveRecord::Base
 
           next if name.empty?
           next if row.css("td")[2].nil?
+          
+          minutes_array = row.css("td")[1].text.split(":")
+          minutes = (minutes_array[0].to_i + minutes_array[1].to_i/60.0).round(2)
 
-          minutes = row.css("td")[1].text.to_i
           fgm = row.css("td")[2].text.to_i
           fga = row.css("td")[3].text.to_i
           three_fgm = row.css("td")[5].text.to_i
