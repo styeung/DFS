@@ -2,7 +2,7 @@ class Game < ActiveRecord::Base
   validates :date, :home_team_id, :away_team_id, presence: true
 
   scope :previous_games, -> { where("date < ?", Date.current).order(:date) }
-  scope :todays_games, -> { where(date: Date.current ) }
+  scope :todays_games, -> { where(date: Date.parse(Time.now.to_s) ) }
 
   has_many(
     :player_games,
@@ -65,30 +65,6 @@ class Game < ActiveRecord::Base
           current_player = Player.find_by_name(name)
 
           unless current_player.nil?
-            PlayerGame.create(
-              player_id: current_player.id,
-              game_id: self.id,
-              points: points,
-              rebounds: rebounds,
-              assists: assists,
-              steals: steals,
-              blocks: blocks,
-              turnovers: turnovers,
-              minutes: minutes,
-              fga: fga,
-              fgm: fgm,
-              three_fga: three_fga,
-              three_fgm: three_fgm,
-              fta: fta,
-              ftm: ftm,
-            )
-          else
-            current_player = Player.create({
-              name: name,
-              position: "NA",
-              team_id: team.id
-            })
-
             PlayerGame.create(
               player_id: current_player.id,
               game_id: self.id,

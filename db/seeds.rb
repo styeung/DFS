@@ -11,125 +11,162 @@ require 'open-uri'
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+
+
 teams = Team.create([
   {
-    name: "ATL"
+    name: "ATL",
+    espn_name: "atl",
+    full_name: "atlanta hawks"
   },
   {
-    name: "BOS"
+    name: "BOS",
+    espn_name: "bos",
+    full_name: "boston celtics"
   },
   {
-    name: "BRK"
+    name: "BRK",
+    espn_name: "bkn",
+    full_name: "brooklyn nets"
   },
   {
-    name: "CHO"
+    name: "CHO",
+    espn_name: "cha",
+    full_name: "charlotte hornets"
   },
   {
-    name: "CHI"
+    name: "CHI",
+    espn_name: "chi",
+    full_name: "chicago bulls"
   },
   {
-    name: "CLE"
+    name: "CLE",
+    espn_name: "cle",
+    full_name: "cleveland cavaliers"
   },
   {
-    name: "DAL"
+    name: "DAL",
+    espn_name: "dal",
+    full_name: "dallas mavericks"
   },
   {
-    name: "DEN"
+    name: "DEN",
+    espn_name: "den",
+    full_name: "denver nuggets"
   },
   {
-    name: "DET"
+    name: "DET",
+    espn_name: "det",
+    full_name: "detroit pistons"
   },
   {
-    name: "GSW"
+    name: "GSW",
+    espn_name: "gs",
+    full_name: "golden state warriors"
   },
   {
-    name: "HOU"
+    name: "HOU",
+    espn_name: "hou",
+    full_name: "houston rockets"
   },
   {
-    name: "IND"
+    name: "IND",
+    espn_name: "ind",
+    full_name: "indiana pacers"
   },
   {
-    name: "LAC"
+    name: "LAC",
+    espn_name: "lac",
+    full_name: "los angeles clippers"
   },
   {
-    name: "LAL"
+    name: "LAL",
+    espn_name: "lal",
+    full_name: "los angeles lakers"
   },
   {
-    name: "MEM"
+    name: "MEM",
+    espn_name: "mem",
+    full_name: "memphis grizzlies"
   },
   {
-    name: "MIA"
+    name: "MIA",
+    espn_name: "mia",
+    full_name: "miami heat"
   },
   {
-    name: "MIL"
+    name: "MIL",
+    espn_name: "mil",
+    full_name: "milwaukee bucks"
   },
   {
-    name: "MIN"
+    name: "MIN",
+    espn_name: "min",
+    full_name: "minnesota timberwolves"
   },
   {
-    name: "NOP"
+    name: "NOP",
+    espn_name: "no",
+    full_name: "new orleans pelicans"
   },
   {
-    name: "NYK"
+    name: "NYK",
+    espn_name: "ny",
+    full_name: "new york knicks"
   },
   {
-    name: "OKC"
+    name: "OKC",
+    espn_name: "okc",
+    full_name: "oklahoma city thunder"
   },
   {
-    name: "ORL"
+    name: "ORL",
+    espn_name: "orl",
+    full_name: "orlando magic"
   },
   {
-    name: "PHI"
+    name: "PHI",
+    espn_name: "phi",
+    full_name: "philadelphia 76ers"
   },
   {
-    name: "PHO"
+    name: "PHO",
+    espn_name: "phx",
+    full_name: "phoenix suns"
   },
   {
-    name: "POR"
+    name: "POR",
+    espn_name: "por",
+    full_name: "portland trail blazers"
   },
   {
-    name: "SAC"
+    name: "SAC",
+    espn_name: "sac",
+    full_name: "sacramento kings"
   },
   {
-    name: "SAS"
+    name: "SAS",
+    espn_name: "sa",
+    full_name: "san antonio spurs"
   },
   {
-    name: "TOR"
+    name: "TOR",
+    espn_name: "tor",
+    full_name: "toronto raptors"
   },
   {
-    name: "UTA"
+    name: "UTA",
+    espn_name: "utah",
+    full_name: "utah jazz"
   },
   {
-    name: "WAS"
+    name: "WAS",
+    espn_name: "wsh",
+    full_name: "washington wizards"
   }
 ])
 
 Team.create_all_players
-
-# Team.all.each do |team|
-#   team_name = team.name
-#
-#   domain = "http://www.basketball-reference.com"
-#   path = "teams"
-#   game_detail = "#{team_name}"
-#   year = "2015"
-#
-#   page = Nokogiri::HTML(open("#{ domain }/#{ path }/#{ game_detail }/#{ year }.html"))
-#
-#   roster_rows = page.css("#div_roster tbody tr")
-#
-#   roster_rows.each do |row|
-#     player_name = row.css("td")[1].css("a").text
-#     player_position = row.css("td")[2].text
-#
-#     Player.create({
-#       name: player_name,
-#       position: player_position,
-#       team_id: team.id
-#     })
-#   end
-# end
-  
 
 
 games = Game.create([
