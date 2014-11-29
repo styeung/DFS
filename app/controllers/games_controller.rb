@@ -29,6 +29,7 @@ class GamesController < ApplicationController
   end
   
   def entire_day_games
+    @date = params[:date]
     @entire_day_games = Game.eager_load(:home_team, :away_team, player_games: [player: [:team ]]).where(date: params[:date])
         
     @entire_day_player_games = []
