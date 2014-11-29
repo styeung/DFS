@@ -128,6 +128,7 @@ class PlayersController < ApplicationController
           player_hash["id"] = player.id
           player_hash["name"] = player.name
           player_hash["position"] = player.position
+          player_hash["opponent_id"] = game.away_team.id
           player_hash["opponent"] = game.away_team.name
           player_hash["average_fantasy_points"] = player.average_fantasy_points.round(2)
           player_hash["expected_fantasy_points"] = player.expected_fantasy_points.round(2)
@@ -163,6 +164,7 @@ class PlayersController < ApplicationController
           player_hash["id"] = player.id
           player_hash["name"] = player.name
           player_hash["position"] = player.position
+          player_hash["opponent_id"] = game.home_team.id
           player_hash["opponent"] = game.home_team.name
           player_hash["average_fantasy_points"] = player.average_fantasy_points.round(2)
           player_hash["expected_fantasy_points"] = player.expected_fantasy_points.round(2)

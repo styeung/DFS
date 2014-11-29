@@ -87,7 +87,16 @@ class Game < ActiveRecord::Base
           end
         end
       end
-
+    end
+  end
+  
+  def other_team(this_team)
+    if self.home_team == this_team
+      return self.away_team
+    elsif self.away_team == this_team
+      return self.home_team
+    else
+      return nil
     end
   end
 end
