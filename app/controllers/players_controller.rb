@@ -18,6 +18,7 @@ class PlayersController < ApplicationController
   
   def daily_starting_lineups
     page = Nokogiri::HTML(open("https://rotogrinders.com/lineups/nba?site=draftkings"))
+    @blacklist = Player.create_blacklist
     
     player_rows = page.css(".player-popup")
     

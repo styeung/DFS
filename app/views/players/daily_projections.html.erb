@@ -17,7 +17,7 @@
 
 <% @player_array.each do |player_hash| %>
 <ul class="group">
-  <li class="table-name"><a href="<%= player_url(player_hash["id"]) %>"><%= player_hash["name"] %></a></li>
+  <li class="table-name"><a target="_blank" href="<%= player_url(player_hash["id"]) %>"><%= player_hash["name"] %></a></li>
   <li class="table-attribute"><%= player_hash["position"] %></li>
   <li class="table-attribute"><%= player_hash["opponent"] %></li>
   <li class="table-attribute"><%= player_hash["average_fantasy_points"] %></li>

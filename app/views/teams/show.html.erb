@@ -1,5 +1,5 @@
 <% @involved_games.each do |game| %>
-<p><%= game.date.strftime("%a, %b %d, %Y") %>:   <a href="<%= game_url(game) %>"><%= game.away_team.name %> @ <%= game.home_team.name %></a></p>
+<p><%= game.date.strftime("%a, %b %d, %Y") %>:   <a target="_blank" href="<%= game_url(game) %>"><%= game.away_team.name %> @ <%= game.home_team.name %></a></p>
 <% end %>
 
 <br>
@@ -15,7 +15,7 @@
 </ul>
 <% @team_players_list.each do |player| %>
 <ul class="group">
-  <li class="table-name"><a href="<%= player_url(player["id"]) %>"><%= player["name"] %></a></li>
+  <li class="table-name"><a target="_blank" href="<%= player_url(player["id"]) %>"><%= player["name"] %></a></li>
   <li class="table-attribute"><%= player["position"] %></li>
   <li class="table-attribute"><%= player["average"].round(2) %></li>
   <li class="table-attribute"><%= player["median"] %></li>
