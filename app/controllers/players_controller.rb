@@ -16,6 +16,20 @@ class PlayersController < ApplicationController
     end
   end
   
+  def daily_starting_lineups
+    page = Nokogiri::HTML(open("https://rotogrinders.com/lineups/nba?site=draftkings"))
+    
+    player_rows = page.css(".player-popup")
+    
+    player_array = []
+    
+    player_rows.each do |row|
+      player_array << row.attr("title")
+    end
+    
+    @players = Player.where("name IN (?)", player_array).sort { |x, y| x.median_minutes <=> y.median_minutes }
+  end
+  
 
   def daily_projections
     @previous_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
@@ -102,6 +116,8 @@ class PlayersController < ApplicationController
       
       end
       
+      blacklist = Player.create_blacklist
+      
       @player_array = []
 
       @todays_games.each do |game|
@@ -112,8 +128,8 @@ class PlayersController < ApplicationController
           player_hash["name"] = player.name
           player_hash["position"] = player.position
           player_hash["opponent"] = game.away_team.name
-          player_hash["average_fantasy_points"] = player.average_fantasy_points
-          player_hash["expected_fantasy_points"] = player.expected_fantasy_points
+          player_hash["average_fantasy_points"] = player.average_fantasy_points.round(2)
+          player_hash["expected_fantasy_points"] = player.expected_fantasy_points.round(2)
           player_hash["average_fantasy_points_per_minute"] = player.fantasy_points_per_minute
           player_hash["median_minutes"] = player.median_minutes
           
@@ -131,10 +147,13 @@ class PlayersController < ApplicationController
           # player_hash["league_multiplier"] = league_multiplier[player.position][game.away_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.away_team.name]
           # player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
-          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"])
-
+          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"]).round(2)
+          
+          unless blacklist[player_hash["name"]].nil?
+            player_hash["status"] = blacklist[player_hash["name"]]
+          end
+        
           @player_array << player_hash
-
         end
 
         game.away_team.players.each do |player|
@@ -144,8 +163,8 @@ class PlayersController < ApplicationController
           player_hash["name"] = player.name
           player_hash["position"] = player.position
           player_hash["opponent"] = game.home_team.name
-          player_hash["average_fantasy_points"] = player.average_fantasy_points
-          player_hash["expected_fantasy_points"] = player.expected_fantasy_points
+          player_hash["average_fantasy_points"] = player.average_fantasy_points.round(2)
+          player_hash["expected_fantasy_points"] = player.expected_fantasy_points.round(2)
           player_hash["average_fantasy_points_per_minute"] = player.fantasy_points_per_minute
           player_hash["median_minutes"] = player.median_minutes
           
@@ -163,7 +182,11 @@ class PlayersController < ApplicationController
           # player_hash["league_multiplier"] = league_multiplier[player.position][game.home_team.name]
           player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.home_team.name]
           # player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
-          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"])
+          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"]).round(2)
+          
+          unless blacklist[player_hash["name"]].nil?
+            player_hash["status"] = blacklist[player_hash["name"]]
+          end
 
           @player_array << player_hash
         end

@@ -50,6 +50,10 @@ ul {
   width: 80px;
 }
 
+.table-long {
+  width: 480px;
+}
+
 .header-link {
   padding: 0 20px;
 }

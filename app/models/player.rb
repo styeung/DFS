@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class Player < ActiveRecord::Base
   validates :name, :position, :team_id, presence: true
   
@@ -14,6 +16,18 @@ class Player < ActiveRecord::Base
     foreign_key: :player_id,
     primary_key: :id
   )
+  
+  def self.create_blacklist
+    blacklist = {}
+    
+    page = Nokogiri::HTML(open("http://www.cbssports.com/nba/injuries/daily"))
+    
+    tables = page.css(".row1, .row2").each do |row|
+      blacklist[(row.css("a")[0].text.strip)] = row.css("td")[5].children[0].text if row.css("a")[0]
+    end
+    
+    blacklist
+  end
   
   def point_history
     @player_games = self.player_games
@@ -105,4 +119,6 @@ class Player < ActiveRecord::Base
   def expected_fantasy_points
     (self.fantasy_points_per_minute * self.median_minutes).round(2)
   end
+  
+  
 end

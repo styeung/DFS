@@ -2,8 +2,8 @@
 <br>
 <ul class="group">
   <li class="table-name">Name</li>
-  <li class="table-name">Position</li>
-  <li class="table-name">Opponent</li>
+  <li class="table-attribute">Position</li>
+  <li class="table-attribute">Opponent</li>
   <li class="table-attribute">Average Fantasy Points</li>
   <li class="table-attribute">Expected Fantasy Points</li>
   <li class="table-attribute">Avg Fantasy PPM</li>
@@ -12,19 +12,22 @@
   <li class="table-attribute">STDEV Normalized</li>
   <li class="table-attribute">Opponents Multiplier</li>
   <li class="table-attribute">Adjusted FP - Opp</li>
+  <li class="table-long">Status</li>
 </ul>
 
 <% @player_array.each do |player_hash| %>
 <ul class="group">
-  <% player_hash.each do |key, value| %>
-    <% next if key == "id" %>
-    <% if key == "name" %>
-      <li class="table-name"><a href="<%= player_url(player_hash["id"]) %>"><%= value %></a></li>
-    <% elsif value.class == String %>
-      <li class="table-name"><%= value %></li>
-    <% else %>
-      <li class="table-attribute"><%= value.round(2) %></li>
-    <% end %>
-  <% end %>
+  <li class="table-name"><a href="<%= player_url(player_hash["id"]) %>"><%= player_hash["name"] %></a></li>
+  <li class="table-attribute"><%= player_hash["position"] %></li>
+  <li class="table-attribute"><%= player_hash["opponent"] %></li>
+  <li class="table-attribute"><%= player_hash["average_fantasy_points"] %></li>
+  <li class="table-attribute"><%= player_hash["expected_fantasy_points"] %></li>
+  <li class="table-attribute"><%= player_hash["average_fantasy_points_per_minute"] %></li>
+  <li class="table-attribute"><%= player_hash["median_minutes"] %></li>
+  <li class="table-attribute"><%= player_hash["stdev"] %></li>
+  <li class="table-attribute"><%= player_hash["stdev_normalized"] %></li>
+  <li class="table-attribute"><%= player_hash["opponents_multiplier"] %></li>
+  <li class="table-attribute"><%= player_hash["adjusted_fantasy_points_opponents"] %></li>
+  <li class="table-long"><%= player_hash["status"] %></li>
 </ul>
 <% end %>
