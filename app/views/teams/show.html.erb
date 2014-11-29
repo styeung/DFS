@@ -1,6 +1,8 @@
-<% @opponents.each do |opponent| %>
-<p><%= opponent.name %></p>
+<% @involved_games.each do |game| %>
+<p><%= game.date.strftime("%a, %b %d, %Y") %>:   <a href="<%= game_url(game) %>"><%= game.away_team.name %> @ <%= game.home_team.name %></a></p>
 <% end %>
+
+<br>
 
 <h1>Offense</h1>
 <ul class="group">

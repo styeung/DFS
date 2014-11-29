@@ -39,21 +39,14 @@ class PlayersController < ApplicationController
       opponents_multiplier = Hash.new {|h, k| h[k] = Hash.new }
 
       @all_teams.each do |team|
-        involved_home_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
+        involved_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
                                    .previous_games
-                                   .where(home_team: team)
-        involved_away_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
-                                   .previous_games
-                                   .where(away_team: team)
-
+                                   .where("home_team_id = ? OR away_team_id = ?", team.id, team.id)
+                               
         @opponents = Set.new
 
-        involved_home_games.each do |game|
+        involved_games.each do |game|
           @opponents.add(game.away_team)
-        end
-
-        involved_away_games.each do |game|
-          @opponents.add(game.home_team)
         end
 
         league = Hash.new {|h, k| h[k] = Hash.new }

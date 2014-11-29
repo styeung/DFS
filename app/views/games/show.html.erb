@@ -10,7 +10,7 @@
 </ul>
 <% @home_team_players.each do |player_game| %>
   <ul class="group">
-    <li class="table-name"><%= player_game.player.name %></li>
+    <li class="table-name"><a href="<%= player_url(player_game.player_id) %>"><%= player_game.player.name %></a></li>
     <li class="table-attribute"><%= player_game.player.position %></li>
   <% player_game.attributes.each do |key, value| %>
     <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
@@ -33,7 +33,7 @@
 </ul>
 <% @away_team_players.each do |player_game| %>
   <ul class="group">
-    <li class="table-name"><%= player_game.player.name %></li>
+    <li class="table-name"><a href="<%= player_url(player_game.player_id) %>"><%= player_game.player.name %></a></li>
     <li class="table-attribute"><%= player_game.player.position %></li>
   <% player_game.attributes.each do |key, value| %>
     <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
