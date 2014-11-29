@@ -29,16 +29,25 @@ class Player < ActiveRecord::Base
     blacklist
   end
   
-  def point_history
-    @player_games = self.player_games
-    @output = []
+  def point_history(games_back = nil)
+    player_games = self.player_games
+    player_games_length = player_games.length
     
-    if @player_games.length > 0
-      @player_games.each do |player_game|
-        @output << player_game.total_fantasy_points
+    games_back = (player_games_length - 1) if games_back.nil?
+    
+    start_point = player_games_length - games_back - 1
+    end_point = player_games_length - 1
+    
+    output = []
+    
+    if player_games.length > 0
+      (start_point..end_point).each do |num|
+        output << player_games[num].total_fantasy_points
+      # player_games.each do |player_game|
+      #   output << player_game.total_fantasy_points
       end
     
-      return @output.sort
+      return output.sort
     else
       return []
     end
@@ -46,15 +55,15 @@ class Player < ActiveRecord::Base
   end
   
   def point_history_per_minute
-    @player_games = self.player_games
-    @output = []
+    player_games = self.player_games
+    output = []
     
-    if @player_games.length > 0
-      @player_games.each do |player_game|
-        @output << player_game.total_fantasy_points/player_game.minutes
+    if player_games.length > 0
+      player_games.each do |player_game|
+        output << player_game.total_fantasy_points/player_game.minutes
       end
     
-      return @output.sort
+      return output.sort
     else
       return []
     end
@@ -76,8 +85,8 @@ class Player < ActiveRecord::Base
     end
   end
   
-  def median_fantasy_points
-    point_history = self.point_history
+  def median_fantasy_points(games_back = nil)
+    point_history = self.point_history(games_back)
     point_history_length = point_history.length
     
     return 0 if point_history_length < 1
@@ -93,16 +102,24 @@ class Player < ActiveRecord::Base
     PlayerGame.where(player_id: self.id).sum("minutes")
   end
   
-  def median_minutes    
-    player_games = PlayerGame.select("minutes").where(player_id: self.id).order("minutes")
+  def median_minutes(games_back = nil)    
+    player_games = PlayerGame.select(:id, :game_id, :minutes).where(player_id: self.id)
+    
+    player_games.sort { |x, y| y.game.date <=> x.game.date }
     player_games_length = player_games.length
+    
+    games_back = player_games_length if games_back.nil?
+    
+    subset_player_games = player_games[0...games_back]
+    
+    subset_player_games.sort { |x, y| x.minutes <=> y.minutes }
     
     return 0 if player_games_length < 1
     
-    if player_games_length % 2 == 0
-      median = ((player_games[player_games_length/2 - 1].minutes + player_games[player_games_length/2].minutes)/2).round(2)
+    if subset_player_games.length % 2 == 0
+      median = ((subset_player_games[subset_player_games.length/2 - 1].minutes + subset_player_games[subset_player_games.length/2].minutes)/2).round(2)
     else
-      median = player_games[player_games_length/2].minutes.round(2)
+      median = subset_player_games[subset_player_games.length/2].minutes.round(2)
     end
   end
   
