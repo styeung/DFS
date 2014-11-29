@@ -1,0 +1,11 @@
+<ul class="group">
+  <li class="table-name">Name</a></li>
+  <li class="table-attribute">Median Minutes</li>
+</ul>
+
+<% @players.each do |player| %>
+  <ul class="group">
+    <li class="table-name"><a href="<%= player_url(player) %>"><%= player.name %></a></li>
+    <li class="table-attribute"><%= player.median_minutes %></li>
+  </ul>
+<% end %>
