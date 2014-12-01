@@ -17,16 +17,9 @@ class PlayersController < ApplicationController
   end
   
   def daily_starting_lineups
-    page = Nokogiri::HTML(open("https://rotogrinders.com/lineups/nba?site=draftkings"))
     @blacklist = Player.create_blacklist
     
-    player_rows = page.css(".player-popup")
-    
-    player_array = []
-    
-    player_rows.each do |row|
-      player_array << row.attr("title")
-    end
+    player_array = Player.retrieve_starting_lineups
     
     @players = Player.where("name IN (?)", player_array).sort { |x, y| x.median_minutes <=> y.median_minutes }
   end

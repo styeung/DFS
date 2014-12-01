@@ -29,6 +29,18 @@ class Player < ActiveRecord::Base
     blacklist
   end
   
+  def self.retrieve_starting_lineups
+    starters = []
+    
+    page = Nokogiri::HTML(open("http://www.rotowire.com/basketball/nba_lineups.htm"))
+    
+    player_rows = page.css(".dlineups-vplayer a").each do |row|
+      starters << row.text
+    end
+    
+    starters
+  end
+  
   def point_history(games_back = nil)
     player_games = self.player_games
     player_games_length = player_games.length
