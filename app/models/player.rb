@@ -33,9 +33,19 @@ class Player < ActiveRecord::Base
     starters = []
     
     page = Nokogiri::HTML(open("http://www.rotowire.com/basketball/nba_lineups.htm"))
+    box_children = page.css(".dlineups-box").children
+    excluded_classes = Set.new([
+      "span15 dlineups-teamsnba",
+      "span15 dlineups-inactivehead",
+      "span15 dlineups-nbainactiveblock"
+    ])
     
-    player_rows = page.css(".dlineups-vplayer a").each do |row|
-      starters << row.text
+    box_children.each do |child|
+      next if excluded_classes.include?(child["class"])
+      
+      child.css(".dlineups-vplayer a").each do |row|
+        starters << row.text
+      end
     end
     
     starters
