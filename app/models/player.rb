@@ -55,9 +55,9 @@ class Player < ActiveRecord::Base
     player_games = self.player_games.sort { |x, y| x.game.date <=> y.game.date }
     player_games_length = player_games.length
     
-    games_back = (player_games_length - 1) if games_back.nil?
+    games_back = player_games_length if games_back.nil?
     
-    start_point = player_games_length - games_back - 1
+    start_point = player_games_length - games_back
     end_point = player_games_length - 1
     
     output = []
@@ -77,9 +77,9 @@ class Player < ActiveRecord::Base
     player_games = self.player_games.sort { |x, y| x.game.date <=> y.game.date }
     player_games_length = player_games.length
     
-    games_back = (player_games_length - 1) if games_back.nil?
+    games_back = player_games_length if games_back.nil?
     
-    start_point = player_games_length - games_back - 1
+    start_point = player_games_length - games_back
     end_point = player_games_length - 1
     
     output = []
@@ -143,7 +143,7 @@ class Player < ActiveRecord::Base
     PlayerGame.where(player_id: self.id).sum("minutes")
   end
   
-  def median_minutes(games_back = nil)    
+  def median_minutes(games_back = nil)
     minute_history = self.minute_history(games_back)
     minute_history_length = minute_history.length
     
