@@ -4,6 +4,8 @@
   <li class="table-name">Matchup</li>
   <li class="table-attribute">Minutes</li>
   <li class="table-attribute">Total Fantasy Points</li>
+  <li class="table-attribute">Fantasy PPM</li>
+  <li class="table-attribute">% of Team Fantasy PPM</li>
 </ul>
 <% @player_games.each do |player_game| %>
 <ul class="group">
@@ -12,6 +14,7 @@
   <li class="table-attribute"><%= player_game.minutes %></li>
   <li class="table-attribute"><%= player_game.total_fantasy_points %></li>
   <li class="table-attribute"><%= (player_game.total_fantasy_points/player_game.minutes).round(2) %></li>
+  <li class="table-attribute"><%= (player_game.total_fantasy_points / player_game.game.total_fantasy_points_for_team(@player.team_id)).round(2) %>
 </ul>
 <% end %>
 <br>

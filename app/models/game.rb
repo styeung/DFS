@@ -99,4 +99,8 @@ class Game < ActiveRecord::Base
       return nil
     end
   end
+  
+  def total_fantasy_points_for_team(team_id)
+    Team.find(team_id).get_fantasy_point_for_game(self.id)
+  end
 end
