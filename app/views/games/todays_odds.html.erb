@@ -1,0 +1,19 @@
+<h2>Today's Odds</h2>
+<ul class="group">
+  <li class="table-name">Date</li>
+  <li class="table-name">Away Team</li>
+  <li class="table-name">Home Team</li>
+  <li class="table-attribute">Total</li>
+  <li class="table-attribute">Away Team Spread</li>
+  <li class="table-attribute">Home Team Spread</li>
+</ul>
+<% @game_array.each do |game| %>
+  <ul class="group">
+    <li class="table-name"><%= game["date"] %></li>
+    <li class="table-name"><%= game["first_team"]["name"] %></li>
+    <li class="table-name"><%= game["second_team"]["name"] %></li>
+    <li class="table-attribute"><%= game["total"] %></li>
+    <li class="table-attribute"><%= game["first_team"]["spread"] %></li>
+    <li class="table-attribute"><%= game["second_team"]["spread"] %></li>
+  </ul>
+<% end %>

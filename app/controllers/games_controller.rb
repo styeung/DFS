@@ -49,7 +49,6 @@ class GamesController < ApplicationController
     rows = page.css(".odds-page-container")
     rows.each do |row|
       date = row.css(".header-time").text
-      next if Date.parse(date) > Date.parse(Time.now.to_s)
       
       game_hash = Hash.new { |h,k| h[k] = Hash.new }
       line_break = row.css(".first.teams a").at_css("br")
