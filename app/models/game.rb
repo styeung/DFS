@@ -27,6 +27,36 @@ class Game < ActiveRecord::Base
 
 
   has_many :players, through: :player_games, source: :player
+  
+  def self.get_todays_odds
+    game_array = []
+    
+    page = Nokogiri::HTML(open("http://www.oddsshark.com/nba/odds"))
+    rows = page.css(".odds-page-container")
+    rows.each do |row|
+      date = row.css(".header-time").text
+      
+      game_hash = Hash.new { |h,k| h[k] = Hash.new }
+      line_break = row.css(".first.teams a").at_css("br")
+      line_break.content = ","
+      teams = row.css(".first.teams a").text.split(",")
+      
+      game_hash["date"] = date
+      game_hash["first_team"]["name"] = teams[0].downcase!
+      game_hash["second_team"]["name"] = teams[1].downcase!
+      
+      total = row.css(".book.total.book-4 span.total").text
+      game_hash["total"] = total
+      
+      spreads = row.css(".book.spread.book-4 span.spread")
+      game_hash["first_team"]["spread"] = spreads[0].text
+      game_hash["second_team"]["spread"] = spreads[1].text
+      
+      game_array << game_hash
+    end
+    
+    game_array
+  end
 
   def create_player_games
     if self.player_games.empty?
@@ -103,4 +133,6 @@ class Game < ActiveRecord::Base
   def total_fantasy_points_for_team(team_id)
     Team.find(team_id).get_fantasy_point_for_game(self.id)
   end
+  
+  
 end
