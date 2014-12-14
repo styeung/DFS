@@ -26,12 +26,10 @@ class PlayersController < ApplicationController
   
 
   def daily_projections
-    @previous_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
-                 .previous_games
-
-    @todays_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
-                 .todays_games
-
+    @previous_games = Game.eager_load(:home_team, :away_team, player_games: [player: [:team]]).previous_games
+       
+    @todays_games = Game.eager_load(:home_team, :away_team).todays_games
+    
     @all_teams = Team.all
     
     @positions = Set.new([
@@ -47,10 +45,8 @@ class PlayersController < ApplicationController
       opponents_multiplier = Hash.new {|h, k| h[k] = Hash.new }
 
       @all_teams.each do |team|
-        involved_games = Game.eager_load(:home_team, :away_team, player_games: [ player: [:team]])
-                                   .previous_games
-                                   .where("home_team_id = ? OR away_team_id = ?", team.id, team.id)
-                               
+        involved_games = @previous_games.select { |previous_game| previous_game.teams.include?(team) }
+        
         @opponents = Set.new
 
         involved_games.each do |game|
