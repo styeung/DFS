@@ -28,6 +28,10 @@ class Game < ActiveRecord::Base
 
   has_many :players, through: :player_games, source: :player
   
+  def teams
+    [self.home_team, self.away_team]
+  end
+  
   def self.get_todays_odds
     game_array = []
     

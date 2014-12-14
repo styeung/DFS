@@ -73,13 +73,9 @@ class PlayersController < ApplicationController
         end
 
         @previous_games.each do |game|
-          @positions.each do |position|
-            all_opponents[position]["encountered"] = false
-            against_team[position]["encountered"] = false
-          end
-
-
           game.player_games.each do |player_game|
+            next unless @positions.include?(player_game.player.position)
+            
             if player_game.player.team_id == team.id
               all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
               all_opponents[player_game.player.position]["count"] += player_game.minutes
@@ -115,76 +111,40 @@ class PlayersController < ApplicationController
       @player_array = []
 
       @todays_games.each do |game|
-        game.home_team.players.each do |player|
-          next unless @positions.include?(player.position)
-          player_hash = {}
-          player_hash["id"] = player.id
-          player_hash["name"] = player.name
-          player_hash["position"] = player.position
-          player_hash["opponent_id"] = game.away_team.id
-          player_hash["opponent"] = game.away_team.name
-          player_hash["average_fantasy_points"] = player.average_fantasy_points.round(2)
-          player_hash["expected_fantasy_points"] = player.expected_fantasy_points.round(2)
-          player_hash["average_fantasy_points_per_minute"] = player.fantasy_points_per_minute
-          player_hash["median_minutes"] = player.median_minutes
+        game.teams.each do |team|
+          team.players.each do |player|
+            player_hash = {}
+            player_hash["id"] = player.id
+            player_hash["name"] = player.name
+            player_hash["position"] = player.position
+            player_hash["opponent_id"] = game.other_team(team).id
+            player_hash["opponent"] = game.other_team(team).name
+            player_hash["average_fantasy_points"] = player.average_fantasy_points.round(2)
+            player_hash["expected_fantasy_points"] = player.expected_fantasy_points.round(2)
+            player_hash["average_fantasy_points_per_minute"] = player.fantasy_points_per_minute
+            player_hash["median_minutes"] = player.median_minutes
           
-          point_history = player.point_history
+            point_history = player.point_history
 
-          if point_history.length > 0
-            squared_differences = point_history.map { |el| (el - player.average_fantasy_points)**2 }
-            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history.length).round(2)
-          else
-            player_hash["stdev"] = 0
-          end
+            unless point_history.empty?
+              squared_differences = point_history.map { |el| (el - player.average_fantasy_points)**2 }
+              player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history.length).round(2)
+            else
+              player_hash["stdev"] = 0
+            end
           
-          player_hash["stdev_normalized"] = (player_hash["stdev"] / player_hash["expected_fantasy_points"]).round(2)
+            player_hash["stdev_normalized"] = (player_hash["stdev"] / player_hash["expected_fantasy_points"]).round(2)
+            
+            player_hash["opponents_multiplier"] = @positions.include?(player.position) ? opponents_multiplier[player.position][game.other_team(team).name] : 1
+            
+            player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"]).round(2)
           
-          # player_hash["league_multiplier"] = league_multiplier[player.position][game.away_team.name]
-          player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.away_team.name]
-          # player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
-          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"]).round(2)
-          
-          unless blacklist[player_hash["name"]].nil?
-            player_hash["status"] = blacklist[player_hash["name"]]
-          end
+            unless blacklist[player_hash["name"]].nil?
+              player_hash["status"] = blacklist[player_hash["name"]]
+            end
         
-          @player_array << player_hash
-        end
-
-        game.away_team.players.each do |player|
-          next unless @positions.include?(player.position)
-          player_hash = {}
-          player_hash["id"] = player.id
-          player_hash["name"] = player.name
-          player_hash["position"] = player.position
-          player_hash["opponent_id"] = game.home_team.id
-          player_hash["opponent"] = game.home_team.name
-          player_hash["average_fantasy_points"] = player.average_fantasy_points.round(2)
-          player_hash["expected_fantasy_points"] = player.expected_fantasy_points.round(2)
-          player_hash["average_fantasy_points_per_minute"] = player.fantasy_points_per_minute
-          player_hash["median_minutes"] = player.median_minutes
-          
-          point_history = player.point_history
-
-          if point_history.length > 0
-            squared_differences = point_history.map { |el| (el - player.average_fantasy_points)**2 }
-            player_hash["stdev"] = Math.sqrt(squared_differences.inject { |sum, el| sum + el }/point_history.length).round(2)
-          else
-            player_hash["stdev"] = 0
+            @player_array << player_hash
           end
-          
-          player_hash["stdev_normalized"] = (player_hash["stdev"] / player_hash["expected_fantasy_points"]).round(2)
-          
-          # player_hash["league_multiplier"] = league_multiplier[player.position][game.home_team.name]
-          player_hash["opponents_multiplier"] = opponents_multiplier[player.position][game.home_team.name]
-          # player_hash["adjusted_fantasy_points_league"] = (player_hash["expected_fantasy_points"] * player_hash["league_multiplier"])
-          player_hash["adjusted_fantasy_points_opponents"] = (player_hash["expected_fantasy_points"] * player_hash["opponents_multiplier"]).round(2)
-          
-          unless blacklist[player_hash["name"]].nil?
-            player_hash["status"] = blacklist[player_hash["name"]]
-          end
-
-          @player_array << player_hash
         end
       end
 
