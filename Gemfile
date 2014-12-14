@@ -54,3 +54,5 @@ gem 'nokogiri'
 gem 'newrelic_rpm'
 gem 'capybara'
 gem 'poltergeist'
+
+gem 'rails_12factor', group: :production
