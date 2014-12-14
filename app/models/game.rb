@@ -80,7 +80,7 @@ class Game < ActiveRecord::Base
           
           minutes_array = row.css("td")[1].text.split(":")
           minutes = (minutes_array[0].to_i + minutes_array[1].to_i/60.0).round(2)
-
+          
           fgm = row.css("td")[2].text.to_i
           fga = row.css("td")[3].text.to_i
           three_fgm = row.css("td")[5].text.to_i

@@ -36,18 +36,15 @@ class Team < ActiveRecord::Base
     # if name == nil, creates all players from the team
     # otherwise, creates specific player
     
-    domain = "http://espn.go.com"
-    path = "nba/team/roster/_/name"
-    espn_name = self.espn_name
-    full_name = self.full_name
-    
+    domain = "http://www.basketball-reference.com/"
+    path = "teams/#{self.name}/2015.html"
 
-    page = Nokogiri::HTML(open("#{ domain }/#{ path }/#{ espn_name }/#{ full_name.gsub(" ", "-") }"))
+    page = Nokogiri::HTML(open("#{ domain }/#{ path }"))
 
-    roster_rows = page.css(".oddrow, .evenrow")
+    roster_rows = page.css("roster")
     
     roster_rows.each do |row|
-      player_name = row.css("a").text
+      player_name = row.css("td")[1].css("a").text
       player_position = row.css("td")[2].text
       
       if name.nil?
