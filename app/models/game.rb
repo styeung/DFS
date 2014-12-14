@@ -94,27 +94,25 @@ class Game < ActiveRecord::Base
           turnovers = row.css("td")[17].text.to_i
           points = row.css("td")[19].text.to_i
 
-          current_player = Player.find_by_name(name)
+          current_player = Player.find_by_name(name) || Player.create({ name: name, position: "NA", team_id: team.id})
 
-          unless current_player.nil?
-            PlayerGame.create(
-              player_id: current_player.id,
-              game_id: self.id,
-              points: points,
-              rebounds: rebounds,
-              assists: assists,
-              steals: steals,
-              blocks: blocks,
-              turnovers: turnovers,
-              minutes: minutes,
-              fga: fga,
-              fgm: fgm,
-              three_fga: three_fga,
-              three_fgm: three_fgm,
-              fta: fta,
-              ftm: ftm,
-            )
-          end
+          PlayerGame.create(
+            player_id: current_player.id,
+            game_id: self.id,
+            points: points,
+            rebounds: rebounds,
+            assists: assists,
+            steals: steals,
+            blocks: blocks,
+            turnovers: turnovers,
+            minutes: minutes,
+            fga: fga,
+            fgm: fgm,
+            three_fga: three_fga,
+            three_fgm: three_fgm,
+            fta: fta,
+            ftm: ftm,
+          )
         end
       end
     end
