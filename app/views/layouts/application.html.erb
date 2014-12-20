@@ -14,6 +14,18 @@
     <li class="header-link"><a href="<%= daily_projections_url %>">Daily Projections</a></li>
     <li class="header-link"><a href="<%= daily_starting_lineups_url %>">Starting Lineups</a></li>
     <li class="header-link"><a href="<%= todays_odds_url %>">Today's Odds</a></li>
+    <form action="<%= search_url %>" method="GET">
+      <%= auth_token %>
+      <input list="matches" name="player[name]" placeholder="Search Player">
+        <li class="header-link">
+          <datalist id="matches">
+            <% Player.eager_load(:team).select(:name, :team_id).each do |player| %>
+              <option value="<%= player.name %>"><%= Team.find(player.team_id).name %></option>
+            <% end %>
+          </datalist>
+        </li>
+      </input>
+    </form>
   </ul>
 </header>
 <%= yield %>

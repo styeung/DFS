@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   
   resources :games, only: [:index, :show]
   
+  get "search", to: "players#search", as: "search"
+  
   get "daily_projections", to: "players#daily_projections", as: "daily_projections"
   
   get "daily_starting_lineups", to: "players#daily_starting_lineups", as: "daily_starting_lineups"

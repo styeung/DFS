@@ -7,9 +7,20 @@ class PlayersController < ApplicationController
 
   def show
     @player = Player.eager_load(player_games: [:game]).find(params[:id])
-    @player_games = @player.player_games
 
     if @player
+      @player_games = @player.player_games
+      render :show
+    else
+      render json: "Player does not exist"
+    end
+  end
+  
+  def search
+    @player = Player.eager_load(player_games: [:game]).find_by_name(player_params[:name])
+    
+    if @player
+      @player_games = @player.player_games
       render :show
     else
       render json: "Player does not exist"
@@ -150,6 +161,10 @@ class PlayersController < ApplicationController
     else
       render json: "No games today"
     end
+  end
+  
+  def player_params
+    params.require(:player).permit(:name)
   end
 
 end
