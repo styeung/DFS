@@ -59,7 +59,7 @@ class TeamsController < ApplicationController
     @opponents = Set.new
 
     @involved_games.each do |game|
-      @opponents.add(game.away_team)
+      @opponents.add(game.other_team(team))
     end
 
     league = Hash.new {|h, k| h[k] = Hash.new }
