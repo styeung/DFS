@@ -99,6 +99,10 @@ class Game < ActiveRecord::Base
           points = row.css("td")[19].text.to_i
 
           current_player = Player.find_by_name(name) || Player.create({ name: name, position: "NA", team_id: team.id})
+          
+          unless current_player.team_id == team.id
+            current_player.update(team_id: team.id)
+          end
 
           PlayerGame.create(
             player_id: current_player.id,
