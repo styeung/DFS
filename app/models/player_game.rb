@@ -3,6 +3,7 @@ class PlayerGame < ActiveRecord::Base
   
   belongs_to :player
   belongs_to :game
+  belongs_to :team
   
   def total_fantasy_points
     bonus = 0

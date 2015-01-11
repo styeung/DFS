@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141128192040) do
+ActiveRecord::Schema.define(version: 20150111032522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,10 +46,12 @@ ActiveRecord::Schema.define(version: 20141128192040) do
     t.integer  "ftm"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "team_id"
   end
 
   add_index "player_games", ["game_id"], name: "index_player_games_on_game_id", using: :btree
   add_index "player_games", ["player_id"], name: "index_player_games_on_player_id", using: :btree
+  add_index "player_games", ["team_id"], name: "index_player_games_on_team_id", using: :btree
 
   create_table "players", force: true do |t|
     t.string   "name",       null: false
@@ -64,12 +66,32 @@ ActiveRecord::Schema.define(version: 20141128192040) do
   add_index "players", ["team_id"], name: "index_players_on_team_id", using: :btree
 
   create_table "teams", force: true do |t|
-    t.string   "name",       null: false
+    t.string   "name",                    null: false
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "full_name"
     t.string   "espn_name"
+    t.float    "points_for_team_PG"
+    t.float    "points_for_team_SG"
+    t.float    "points_for_team_SF"
+    t.float    "points_for_team_PF"
+    t.float    "points_for_team_C"
+    t.float    "minutes_for_team_PG"
+    t.float    "minutes_for_team_SG"
+    t.float    "minutes_for_team_SF"
+    t.float    "minutes_for_team_PF"
+    t.float    "minutes_for_team_C"
+    t.float    "points_against_team_PG"
+    t.float    "points_against_team_SG"
+    t.float    "points_against_team_SF"
+    t.float    "points_against_team_PF"
+    t.float    "points_against_team_C"
+    t.float    "minutes_against_team_PG"
+    t.float    "minutes_against_team_SG"
+    t.float    "minutes_against_team_SF"
+    t.float    "minutes_against_team_PF"
+    t.float    "minutes_against_team_C"
   end
 
   add_index "teams", ["espn_name"], name: "index_teams_on_espn_name", using: :btree

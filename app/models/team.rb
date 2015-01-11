@@ -21,7 +21,14 @@ class Team < ActiveRecord::Base
     foreign_key: :away_team_id,
     primary_key: :id
   )
-  
+
+  has_many(
+    :player_games,
+    class_name: "PlayerGame",
+    foreign_key: :team_id,
+    primary_key: :id 
+  )
+
   def self.create_all_players
     self.all.each do |team|
       team.create_team_players
