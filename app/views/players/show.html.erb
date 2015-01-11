@@ -31,3 +31,24 @@
   <li class="table-attribute"><%= @player.median_minutes(5) %></li>
   <li class="table-attribute"><%= @player.median_fantasy_points(5) %></li>
 </ul>
+<br>
+<ul class="group">
+  <li class="table-name">Median Last 15</li>
+  <li class="table-name">==></li>
+  <li class="table-attribute"><%= @player.median_minutes(15) %></li>
+  <li class="table-attribute"><%= @player.median_fantasy_points(15) %></li>
+</ul>
+<br>
+<ul class="group">
+  <li class="table-name">Median Home</li>
+  <li class="table-name">==></li>
+  <li class="table-attribute"><%= @player.median_minutes_in_home_games %></li>
+  <li class="table-attribute"><%= @player.median_fantasy_points_in_home_games %></li>
+</ul>
+<br>
+<ul class="group">
+  <li class="table-name">Median Away</li>
+  <li class="table-name">==></li>
+  <li class="table-attribute"><%= @player.median_minutes_in_away_games %></li>
+  <li class="table-attribute"><%= @player.median_fantasy_points_in_away_games %></li>
+</ul>

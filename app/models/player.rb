@@ -139,6 +139,70 @@ class Player < ActiveRecord::Base
     end
   end
   
+  def median_minutes_in_home_games
+    home_player_games = self.player_games.select { |player_game| player_game.game.home_team == self.team }
+    
+    minute_history = home_player_games.map { |player_game| player_game.minutes }.sort
+    
+    minute_history_length = minute_history.length
+    
+    return 0 if minute_history_length < 1
+    
+    if minute_history_length % 2 == 0
+      median = ((minute_history[minute_history_length/2 - 1] + minute_history[minute_history_length/2])/2).round(2)
+    else
+      median = minute_history[minute_history_length/2].round(2)
+    end
+  end
+  
+  def median_minutes_in_away_games
+    away_player_games = self.player_games.select { |player_game| player_game.game.home_team != self.team }
+    
+    minute_history = away_player_games.map { |player_game| player_game.minutes }.sort
+    
+    minute_history_length = minute_history.length
+    
+    return 0 if minute_history_length < 1
+    
+    if minute_history_length % 2 == 0
+      median = ((minute_history[minute_history_length/2 - 1] + minute_history[minute_history_length/2])/2).round(2)
+    else
+      median = minute_history[minute_history_length/2].round(2)
+    end
+  end
+  
+  def median_fantasy_points_in_home_games
+    home_player_games = self.player_games.select { |player_game| player_game.game.home_team == self.team }
+    
+    point_history = home_player_games.map { |player_game| player_game.total_fantasy_points }.sort
+    
+    point_history_length = point_history.length
+    
+    return 0 if point_history_length < 1
+    
+    if point_history_length % 2 == 0
+      median = ((point_history[point_history_length/2 - 1] + point_history[point_history_length/2])/2).round(2)
+    else
+      median = point_history[point_history_length/2].round(2)
+    end
+  end
+  
+  def median_fantasy_points_in_away_games
+    away_player_games = self.player_games.select { |player_game| player_game.game.home_team != self.team }
+    
+    point_history = away_player_games.map { |player_game| player_game.total_fantasy_points }.sort
+    
+    point_history_length = point_history.length
+    
+    return 0 if point_history_length < 1
+    
+    if point_history_length % 2 == 0
+      median = ((point_history[point_history_length/2 - 1] + point_history[point_history_length/2])/2).round(2)
+    else
+      median = point_history[point_history_length/2].round(2)
+    end
+  end
+  
   def total_minutes
     PlayerGame.where(player_id: self.id).sum("minutes")
   end
