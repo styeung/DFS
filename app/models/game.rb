@@ -107,6 +107,7 @@ class Game < ActiveRecord::Base
           PlayerGame.create(
             player_id: current_player.id,
             game_id: self.id,
+            team_id: team.id,
             points: points,
             rebounds: rebounds,
             assists: assists,

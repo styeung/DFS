@@ -16,8 +16,8 @@
   <ul class="group">
     <li class="table-name"><%= player_game.player.name %></li>
     <li class="table-attribute"><%= player_game.player.position %></li>
-    <li class="table-attribute"><a href="<%= team_url(player_game.player.team) %>"><%= player_game.player.team.name %></a></li>
-    <li class="table-attribute"><a href="<%= team_url(player_game.game.other_team(player_game.player.team)) %>"><%= player_game.game.other_team(player_game.player.team).name %></a></li>
+    <li class="table-attribute"><a href="<%= team_url(player_game.team) %>"><%= player_game.team.name %></a></li>
+    <li class="table-attribute"><a href="<%= team_url(player_game.game.other_team(player_game.team)) %>"><%= player_game.game.other_team(player_game.team).name %></a></li>
     <li class="table-attribute"><%= total_fantasy_points %></li>
     <li class="table-attribute"><%= player_game.minutes %></li>
     <li class="table-attribute"><%= total_fantasy_points/player_game.minutes %></li>

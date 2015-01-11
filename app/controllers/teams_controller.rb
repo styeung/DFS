@@ -81,14 +81,14 @@ class TeamsController < ApplicationController
       game.player_games.each do |player_game|
         next unless @positions.include?(player_game.player.position)
         
-        if player_game.player.team_id == team.id
+        if player_game.team_id == team.id
           all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
           all_opponents[player_game.player.position]["count"] += player_game.minutes
         else
           if game.home_team_id == team.id || game.away_team_id == team.id
             against_team[player_game.player.position]["points"] += player_game.total_fantasy_points
             against_team[player_game.player.position]["count"] += player_game.minutes
-          elsif @opponents.include?(player_game.player.team)
+          elsif @opponents.include?(player_game.team)
             all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
             all_opponents[player_game.player.position]["count"] += player_game.minutes
           end

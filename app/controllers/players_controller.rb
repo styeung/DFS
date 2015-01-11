@@ -83,7 +83,7 @@ class PlayersController < ApplicationController
           game.player_games.each do |player_game|
             next unless @positions.include?(player_game.player.position)
             
-            if player_game.player.team_id == team.id
+            if player_game.team_id == team.id
               all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
               all_opponents[player_game.player.position]["count"] += player_game.minutes
             else

@@ -9,14 +9,14 @@ class GamesController < ApplicationController
   end
   
   def show
-    @game = Game.eager_load(:home_team, :away_team, player_games: [:player]).find(params[:id])
+    @game = Game.eager_load(:home_team, :away_team, player_games: [:team, :player]).find(params[:id])
     @home_team_players = []
     @away_team_players = []
     
     @game.player_games.each do |player_game|
-      if player_game.player.team_id == @game.home_team_id
+      if player_game.team_id == @game.home_team_id
         @home_team_players << player_game
-      elsif player_game.player.team_id == @game.away_team_id
+      elsif player_game.team_id == @game.away_team_id
         @away_team_players << player_game
       end
     end
