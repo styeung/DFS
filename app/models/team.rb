@@ -104,10 +104,9 @@ class Team < ActiveRecord::Base
     
   def get_point_history
     output = []
-    all_player_ids = self.players.pluck(:id)
     
     self.games.each do |game|
-      output << PlayerGame.where("game_id = ? AND player_id IN (?)", game.id, all_player_ids).sum(:points)
+      output << PlayerGame.where("game_id = ? AND team_id = ?", game.id, self.id).sum(:points)
     end
     
     output
@@ -115,11 +114,10 @@ class Team < ActiveRecord::Base
   
   def get_fantasy_point_history
     output = []
-    all_player_ids = self.players.pluck(:id)
     
     self.games.each do |game|
       temp = 0
-      PlayerGame.where("game_id = ? AND player_id IN (?)", game.id, all_player_ids)
+      PlayerGame.where("game_id = ? AND team_id = ?", game.id, self.id)
                 .each { |player_game| temp += player_game.total_fantasy_points }
                           
       puts temp
@@ -131,9 +129,8 @@ class Team < ActiveRecord::Base
   
   def get_fantasy_point_for_game(game_id)
     points = 0
-    all_player_ids = self.players.pluck(:id)
     
-    PlayerGame.where("game_id = ? AND player_id IN (?)", game_id, all_player_ids)
+    PlayerGame.where("game_id = ? AND team_id = ?", game_id, self.id)
               .each { |player_game| points += player_game.total_fantasy_points }
                         
     points

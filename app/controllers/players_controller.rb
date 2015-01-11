@@ -90,7 +90,7 @@ class PlayersController < ApplicationController
               if game.home_team_id == team.id || game.away_team_id == team.id
                 against_team[player_game.player.position]["points"] += player_game.total_fantasy_points
                 against_team[player_game.player.position]["count"] += player_game.minutes
-              elsif @opponents.include?(player_game.player.team)
+              elsif @opponents.include?(player_game.team)
                 all_opponents[player_game.player.position]["points"] += player_game.total_fantasy_points
                 all_opponents[player_game.player.position]["count"] += player_game.minutes
               end
