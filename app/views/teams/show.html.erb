@@ -8,8 +8,8 @@
 <ul class="group">
   <li class="table-name">Name</li>
   <li class="table-attribute">Position</li>
+    <li class="table-attribute">Median</li>
   <li class="table-attribute">Avg Fantasy Points Per Game</li>
-  <li class="table-attribute">Median</li>
   <li class="table-attribute">STDEV</li>
   
 </ul>
@@ -17,8 +17,8 @@
 <ul class="group">
   <li class="table-name"><a href="<%= player_url(player["id"]) %>"><%= player["name"] %></a></li>
   <li class="table-attribute"><%= player["position"] %></li>
+    <li class="table-attribute"><%= player["median"] %></li>
   <li class="table-attribute"><%= player["average"].round(2) %></li>
-  <li class="table-attribute"><%= player["median"] %></li>
   <li class="table-attribute"><%= player["stdev"] %></li>
 </ul>
 <% end %>

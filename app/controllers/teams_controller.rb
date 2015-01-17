@@ -48,7 +48,7 @@ class TeamsController < ApplicationController
       end
     end
 
-    @team_players_list.sort { |x, y| y["average"] <=> x["average"] }
+    @team_players_list.sort { |x, y| y["median"] <=> x["median"] }
 
     team = Team.find(params[:id])
 
