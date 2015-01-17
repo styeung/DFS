@@ -49,12 +49,24 @@ class Game < ActiveRecord::Base
       game_hash["first_team"]["name"] = teams[0].downcase!
       game_hash["second_team"]["name"] = teams[1].downcase!
       
-      total = row.css(".book.total.book-4 span.total").text
-      game_hash["total"] = total
-      
-      spreads = row.css(".book.spread.book-4 span.spread")
-      game_hash["first_team"]["spread"] = spreads[0].text
-      game_hash["second_team"]["spread"] = spreads[1].text
+      #5 ==> BetOnline
+      #4 ==> MyBookie.Ag
+      #3 ==> Bovada
+      #2 ==> 5Dimes
+      [5, 4, 3, 2].each do |num|
+        unless row.css(".book.total.book-#{num} span.total").text.empty?
+          total = row.css(".book.total.book-#{num} span.total").text
+          spreads = row.css(".book.spread.book-#{num} span.spread")
+          
+          game_hash["total"] = total
+          game_hash["first_team"]["spread"] = spreads[0].text
+          game_hash["second_team"]["spread"] = spreads[1].text
+          
+          break
+        else
+          next
+        end
+      end
       
       game_array << game_hash
     end

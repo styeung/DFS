@@ -148,50 +148,50 @@ class Team < ActiveRecord::Base
     output
   end
   
-  def points_and_minutes_for_team(position = nil)
-    if position.nil?
-      all_player_ids = self.players.pluck(:id)
-    else
-      all_player_ids = Player.where(team_id: self.id, position: position).pluck(:id)
-    end
-    
-    fantasy_points = 0
-    minutes = 0
-    
-    self.games.each do |game|
-      PlayerGame.where("game_id = ? AND player_id IN (?)", game.id, all_player_ids)
-                .each do |player_game| 
-                  fantasy_points += player_game.total_fantasy_points
-                  minutes += player_game.minutes
-                end
-    end
-    
-    { 
-      points: fantasy_points,
-      minutes: minutes
-    }
-  end
-  
-  def points_per_minute_against_team(position = nil)
-    all_player_ids = self.players.pluck(:id)
-    
-    fantasy_points = 0
-    minutes = 0
-    
-    self.games.each do |game|
-      PlayerGame.where("game_id = ? AND player_id NOT IN (?)", game.id, all_player_ids)
-                .each do |player_game|
-                  if position.nil? || player_game.player.position == position
-                    fantasy_points += player_game.total_fantasy_points
-                    minutes += player_game.minutes
-                  end
-                end
-    end
-    
-    { 
-      points: fantasy_points,
-      minutes: minutes
-    }
-  end
+  # def points_and_minutes_for_team(position = nil)
+  #   if position.nil?
+  #     all_player_ids = self.players.pluck(:id)
+  #   else
+  #     all_player_ids = Player.where(team_id: self.id, position: position).pluck(:id)
+  #   end
+  #
+  #   fantasy_points = 0
+  #   minutes = 0
+  #
+  #   self.games.each do |game|
+  #     PlayerGame.where("game_id = ? AND player_id IN (?)", game.id, all_player_ids)
+  #               .each do |player_game|
+  #                 fantasy_points += player_game.total_fantasy_points
+  #                 minutes += player_game.minutes
+  #               end
+  #   end
+  #
+  #   {
+  #     points: fantasy_points,
+  #     minutes: minutes
+  #   }
+  # end
+  #
+  # def points_per_minute_against_team(position = nil)
+  #   all_player_ids = self.players.pluck(:id)
+  #
+  #   fantasy_points = 0
+  #   minutes = 0
+  #
+  #   self.games.each do |game|
+  #     PlayerGame.where("game_id = ? AND player_id NOT IN (?)", game.id, all_player_ids)
+  #               .each do |player_game|
+  #                 if position.nil? || player_game.player.position == position
+  #                   fantasy_points += player_game.total_fantasy_points
+  #                   minutes += player_game.minutes
+  #                 end
+  #               end
+  #   end
+  #
+  #   {
+  #     points: fantasy_points,
+  #     minutes: minutes
+  #   }
+  # end
   
 end
