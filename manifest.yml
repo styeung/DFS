@@ -4,7 +4,7 @@
       memory: 1G
       instances: 1
       path: .
-      command: bin/rake db:migrate && bin/rake db:seed && bin/rails server -p $PORT
+      command: bin/rake db:migrate && bin/rake db:reset && bin/rails server -p $PORT
       services:
         - rails-postgres
   timeout: 180

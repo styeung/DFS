@@ -1,5 +1,5 @@
 <% dates_hash = {} %>
-<% @previous_games.each do |game| %>
+<% @previous_games.reverse.each do |game| %>
   <% if dates_hash[ game.date.strftime("%d-%b-%Y") ].nil?  %>
     <br>
     <a href="<%=  entire_day_games_url(game.date.strftime("%d-%b-%Y")) %>"><%= game.date.strftime("%d-%b-%Y") %></a>

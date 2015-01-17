@@ -14,7 +14,7 @@
 <% @entire_day_player_games.each do |player_game| %>
   <%  total_fantasy_points = player_game.total_fantasy_points %>
   <ul class="group">
-    <li class="table-name"><%= player_game.player.name %></li>
+    <li class="table-name"><a href="<%= player_url(player_game.player) %>"><%= player_game.player.name %></a></li>
     <li class="table-attribute"><%= player_game.player.position %></li>
     <li class="table-attribute"><a href="<%= team_url(player_game.team) %>"><%= player_game.team.name %></a></li>
     <li class="table-attribute"><a href="<%= team_url(player_game.game.other_team(player_game.team)) %>"><%= player_game.game.other_team(player_game.team).name %></a></li>
