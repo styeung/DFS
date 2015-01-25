@@ -56,8 +56,8 @@ class Player < ActiveRecord::Base
     player_games_length = player_games.length
     
     games_back = player_games_length if games_back.nil?
-    
-    start_point = player_games_length - games_back
+
+    start_point = (player_games_length - games_back) > 0 ? (player_games_length - games_back) : 0
     end_point = player_games_length - 1
     
     output = []
@@ -79,7 +79,7 @@ class Player < ActiveRecord::Base
     
     games_back = player_games_length if games_back.nil?
     
-    start_point = player_games_length - games_back
+    start_point = (player_games_length - games_back) > 0 ? (player_games_length - games_back) : 0
     end_point = player_games_length - 1
     
     output = []
