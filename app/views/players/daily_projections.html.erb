@@ -4,14 +4,12 @@
   <li class="table-name">Name</li>
   <li class="table-attribute">Position</li>
   <li class="table-attribute">Opponent</li>
-  <li class="table-attribute">Average Fantasy Points</li>
-  <li class="table-attribute">Expected Fantasy Points</li>
+  <li class="table-attribute">Avg Fantasy PPG</li>
   <li class="table-attribute">Avg Fantasy PPM</li>
   <li class="table-attribute">Median Minutes</li>
+  <li class="table-attribute">Expected Fantasy Points</li>
   <li class="table-attribute">STDEV</li>
   <li class="table-attribute">STDEV Normalized</li>
-  <li class="table-attribute">Opponents Multiplier</li>
-  <li class="table-attribute">Adjusted FP - Opp</li>
   <li class="table-long">Status</li>
 </ul>
 
@@ -21,13 +19,11 @@
   <li class="table-attribute"><%= player_hash["position"] %></li>
   <li class="table-attribute"><a href="<%= team_url(player_hash["opponent_id"]) %>"><%= player_hash["opponent"] %></a></li>
   <li class="table-attribute"><%= player_hash["average_fantasy_points"] %></li>
-  <li class="table-attribute"><%= player_hash["expected_fantasy_points"] %></li>
   <li class="table-attribute"><%= player_hash["average_fantasy_points_per_minute"] %></li>
   <li class="table-attribute"><%= player_hash["median_minutes"] %></li>
+  <li class="table-attribute"><%= player_hash["expected_fantasy_points"] %></li>
   <li class="table-attribute"><%= player_hash["stdev"] %></li>
   <li class="table-attribute"><%= player_hash["stdev_normalized"] %></li>
-  <li class="table-attribute"><%= player_hash["opponents_multiplier"] %></li>
-  <li class="table-attribute"><%= player_hash["adjusted_fantasy_points_opponents"] %></li>
   <li class="table-long"><%= player_hash["status"] %></li>
 </ul>
 <% end %>
