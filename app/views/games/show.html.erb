@@ -3,20 +3,22 @@
   <li class="table-name">Name</li>
   <li class="table-attribute">Position</li>
   <% @game.player_games[0].attributes.each do |key, value| %>
-    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
+    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" || key == "team_id" || key == "fga" || key == "three_fga" || key == "fta" %>
     <li class="table-attribute"><%= key %></li>
   <% end %>
   <li class="table-attribute">Total Fantasy Points</li>
+  <li class="table-attribute">Percentage of Team Points</li>
 </ul>
 <% @home_team_players.each do |player_game| %>
   <ul class="group">
     <li class="table-name"><a href="<%= player_url(player_game.player_id) %>"><%= player_game.player.name %></a></li>
     <li class="table-attribute"><%= player_game.player.position %></li>
-  <% player_game.attributes.each do |key, value| %>
-    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
-    <li class="table-attribute"><%= value %></li>
-  <% end %>
-  <li class="table-attribute"><%= player_game.total_fantasy_points %></li>
+    <% player_game.attributes.each do |key, value| %>
+      <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" || key == "team_id" || key == "fga" || key == "three_fga" || key == "fta"%>
+      <li class="table-attribute"><%= value %></li>
+    <% end %>
+    <li class="table-attribute"><%= player_game.total_fantasy_points %></li>
+    <li class="table-attribute"><%= (player_game.total_fantasy_points/@game.total_fantasy_points_for_team(@game.home_team)).round(2) %></li>
   </ul>
 <% end %>
 
@@ -26,19 +28,21 @@
   <li class="table-name">Name</li>
   <li class="table-attribute">Position</li>
   <% @game.player_games[0].attributes.each do |key, value| %>
-    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
+    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" || key == "team_id" || key == "fga" || key == "three_fga" || key == "fta"%>
     <li class="table-attribute"><%= key %></li>
   <% end %>
   <li class="table-attribute">Total Fantasy Points</li>
+  <li class="table-attribute">Percentage of Team Points</li>
 </ul>
 <% @away_team_players.each do |player_game| %>
   <ul class="group">
     <li class="table-name"><a href="<%= player_url(player_game.player_id) %>"><%= player_game.player.name %></a></li>
     <li class="table-attribute"><%= player_game.player.position %></li>
-  <% player_game.attributes.each do |key, value| %>
-    <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" %>
-    <li class="table-attribute"> <%= value %></li>
-  <% end %>
-  <li class="table-attribute"><%= player_game.total_fantasy_points %></li>
+    <% player_game.attributes.each do |key, value| %>
+      <% next if key == "id" || key == "created_at" || key == "updated_at" || key == "player_id" || key == "game_id" || key == "team_id" || key == "fga" || key == "three_fga" || key == "fta"%>
+      <li class="table-attribute"> <%= value %></li>
+    <% end %>
+    <li class="table-attribute"><%= player_game.total_fantasy_points %></li>
+    <li class="table-attribute"><%= (player_game.total_fantasy_points/@game.total_fantasy_points_for_team(@game.away_team)).round(2) %></li>
   </ul>
 <% end %>
