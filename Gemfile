@@ -38,9 +38,11 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+# noinspection RubyInterpreterInspection
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl'
+  gem 'capybara'
 end
 
 group :development do
@@ -51,8 +53,5 @@ group :development do
 end
 
 gem 'nokogiri'
-gem 'newrelic_rpm'
-gem 'capybara'
-gem 'poltergeist'
 
 gem 'rails_12factor', group: :production
